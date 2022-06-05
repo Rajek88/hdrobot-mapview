@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MapView</title>
+    <link rel="stylesheet" href="mapViewStyle.css" />
+    <script
+      type="text/javascript"
+      src="http://maps.google.com/maps/api/js?sensor=false"
+    ></script>
+  </head>
+  <body onload="initialize()">
+    <header>MapView for Gas Tragedy Rescue Robot</header>
+    <main>
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+      <div class="list-container">
+        <div class="list-view">
+          <!-- <div class="list">
+                <div class="coordinates">
+                  <p>Latitude : 0</p>
+                  <p>Longitude : 0</p>
+                </div>
+                <div class="gas">
+                  <p>Gas Type</p>
+                  <p>Gas PPM</p>
+                </div>
+                <div class="dht">
+                  <p>Temperature</p>
+                  <p>Humidity</p>
+                </div>
+                <div class="gmap-link">
+                  <a target="_blank" href="">Navigate</a>
+                </div>
+              </div> -->
+        </div>
+      </div>
+    </main>
+  </body>
+  <script>
+    let listView = document.querySelector(".list-view");
+    let dataset = [];
+    let coords = [];
+    const ipUrl =
+      "https://hd-robot-default-rtdb.asia-southeast1.firebasedatabase.app/unit1/humanLocations.json";
+    fetch(ipUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("data : ", data);
+        // console.log("type of data : ", typeof data);
+        dataset = Object.keys(data).map(function (k) {
+          return { key: k, ...data[k] };
+        });
+        console.log("dataset : ", dataset);
+        console.log("type of dataset : ", typeof dataset);
+        dataset.map((i) => {
+          coords.push({
+            lat: i.coordinates.latitude,
+            lng: i.coordinates.longitude,
+          });
+          let gasQuality = "GOOD";
+          let gasColor = "green";
+          if (i.gasPPM <= 190) {
+            gasQuality = "GOOD";
+          } else if (i.gasPPM <= 300) {
+            gasQuality = "MODERATE";
+            gasColor = "orange";
+          } else {
+            gasQuality = "DANGEROUS";
+            gasColor = "tomato";
+          }
+          listView.innerHTML =
+            listView.innerHTML +
+            `<div class="list" key=${i.key}>
+          <div class="coordinates">
+            <p>Latitude: ${i.coordinates.latitude}</p>
+            <p>Longitude: ${i.coordinates.longitude}</p>
+          </div>
+          <div class="gas" style="color: ${gasColor}">
+            <p>Air Quality: ${gasQuality}</p>
+            <p>Air PPM: ${i.gasPPM}</p>
+          </div>
+          <div class="dht">
+            <p>Temperature: ${i.temperature}'C</p>
+            <p>Humidity: ${i.humidity}</p>
+          </div>
+          <div class="gmap-link">
+            <a target="_blank" href="http://maps.google.com/maps?q=${i.coordinates.latitude},${i.coordinates.longitude}">Navigate</a>
+          </div>
+        </div>`;
+          //   listView.append(list);
+        });
+        return;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    var metros;
+
+    function initialize() {
+      var map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 4,
+        center: new google.maps.LatLng(22.7964, 79.8456),
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+      });
+
+      //   var coords = [
+      //     { lat: coordinateA.lat(), lng: coordinateA.lng() },
+      //     { lat: coordinateB.lat(), lng: coordinateB.lng() },
+      //     { lat: coordinateC.lat(), lng: coordinateC.lng() },
+      //     { lat: coordinateD.lat(), lng: coordinateD.lng() },
+      //   ];
+
+      metros = new google.maps.Polygon({
+        paths: coords,
+        strokeColor: "#0000FF",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#0000FF",
+        fillOpacity: 0.26,
+      });
+
+      metros.setMap(map);
+    }
+  </script>
+</html>
