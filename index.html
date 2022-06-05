@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MapView</title>
     <meta name="author" content="Rajendra Kulkarni" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" href="mapViewStyle.css" />
     <script
       type="text/javascript"
       src="https://maps.google.com/maps/api/js?sensor=false"
     ></script>
   </head>
-  <body onload="initialize()">
+  <body>
     <header>MapView for Gas Tragedy Rescue Robot</header>
     <main>
       <div class="map-container">
@@ -94,37 +95,28 @@
         </div>`;
           //   listView.append(list);
         });
-        return;
+      })
+      .then(() => {
+        var map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 4,
+          center: new google.maps.LatLng(22.7964, 79.8456),
+          mapTypeId: google.maps.MapTypeId.HYBRID,
+        });
+
+        console.log("Coordinates Array: ", coords);
+        let metros = new google.maps.Polygon({
+          paths: coords,
+          strokeColor: "tomato",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: "orange",
+          fillOpacity: 0.26,
+        });
+
+        metros.setMap(map);
       })
       .catch((error) => {
         console.error(error);
       });
-    var metros;
-
-    function initialize() {
-      var map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 4,
-        center: new google.maps.LatLng(22.7964, 79.8456),
-        mapTypeId: google.maps.MapTypeId.HYBRID,
-      });
-
-      //   var coords = [
-      //     { lat: coordinateA.lat(), lng: coordinateA.lng() },
-      //     { lat: coordinateB.lat(), lng: coordinateB.lng() },
-      //     { lat: coordinateC.lat(), lng: coordinateC.lng() },
-      //     { lat: coordinateD.lat(), lng: coordinateD.lng() },
-      //   ];
-
-      metros = new google.maps.Polygon({
-        paths: coords,
-        strokeColor: "#0000FF",
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: "#0000FF",
-        fillOpacity: 0.26,
-      });
-
-      metros.setMap(map);
-    }
   </script>
 </html>

@@ -27,7 +27,7 @@ main {
 .map-container,
 .list-container {
   margin: 5px 0px;
-  min-width: 400px;
+  min-width: 350px;
   /* border: 1px solid cyan; */
   display: flex;
   flex-direction: column;
@@ -76,13 +76,18 @@ main {
 .gas,
 .dht,
 .gmap-link {
-  width: 24%;
   height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 0.5px dotted #000;
+  word-wrap: break-word;
+}
+.coordinates,
+.gas,
+.dht {
+  width: 30%;
 }
 
 .gmap-link a {
@@ -91,13 +96,23 @@ main {
   background-color: tomato;
   border-radius: 30px;
   padding: 10px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-@media only screen and (max-width: 995px) {
+@media only screen and (max-width: 875px) {
   .map-container {
     height: 45vh;
   }
   .list-container {
     height: 45vh;
+  }
+  .coordinates,
+  .gas,
+  .dht,
+  .gmap-link {
+    width: 100%;
   }
 }
