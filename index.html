@@ -55,8 +55,8 @@
         dataset = Object.keys(data).map(function (k) {
           return { key: k, ...data[k] };
         });
-        console.log("dataset : ", dataset);
-        console.log("type of dataset : ", typeof dataset);
+        // console.log("dataset : ", dataset);
+        // console.log("type of dataset : ", typeof dataset);
         dataset.map((i) => {
           coords.push({
             lat: i.coordinates.latitude,
